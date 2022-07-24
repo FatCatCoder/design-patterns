@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@types/jest": "^27.0.2",
+    "jest": "^27.3.0",
+    "ts-jest": "^27.0.7"
+  },
+  "scripts": {
+    "test": "jest",
+    "testing": "jest --watch"
+  },
+  "devDependencies": {
+    "typescript": "^4.6.3"
+  }
+}
