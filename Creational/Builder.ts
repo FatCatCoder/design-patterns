@@ -1,36 +1,36 @@
-interface Builder {
-    stepOne(arg?: any): void;
-    stepTwo(arg?: any): void;
-    stepThree(arg?: any): void;
+interface PizzaBuilder {
+    addCrust(arg?: any): void;
+    addSauce(arg?: any): void;
+    addTopping(arg?: any): void;
+
+    getPizza(reset: boolean): PizzaBuilderResult;
 }
 
-class BuilderResult{
-    public ResultPropertyOne: any 
-    public ResultPropertyTwo: any 
-    public ResultPropertyThree: any 
+class PizzaBuilderResult { // better name would be just "Pizza" but this shows the pattern better
+    public Crust: any 
+    public Sauce: any 
+    public Toppings: any[] = []; 
 
-    public ResultMethod(): void{
-
-    }
+    public ResultMethod(): void{}
 }
 
-class ConcreteBuilder implements Builder{
-    private BuilderResult: BuilderResult;
+class PizzaMenu implements PizzaBuilder {
+    private PizzaBuilderResult: PizzaBuilderResult = new PizzaBuilderResult();
 
     constructor() {
-        this.reset();
+        this.PizzaBuilderResult = new PizzaBuilderResult();
     }
 
     public reset(): void {
-        this.BuilderResult = new BuilderResult();
+        this.PizzaBuilderResult = new PizzaBuilderResult();
     }
 
-    public stepOne(arg = null): void { this.BuilderResult.ResultPropertyOne = arg??"Hello" };
-    public stepTwo(arg = null): void { this.BuilderResult.ResultPropertyTwo = arg??"Design"};
-    public stepThree(arg = null): void { this.BuilderResult.ResultPropertyThree = arg??"Patterns!"};
+    public addCrust(arg = null): void { this.PizzaBuilderResult.Crust = arg};
+    public addSauce(arg = null): void { this.PizzaBuilderResult.Sauce = arg };
+    public addTopping(arg = null): void { this.PizzaBuilderResult.Toppings.push(arg) };
 
-    public getResult(reset: boolean = false): BuilderResult{
-        const Temp = this.BuilderResult;
+    public getPizza(reset: boolean = false): PizzaBuilderResult{
+        const Temp = this.PizzaBuilderResult;
         if(reset) this.reset(); // optional destruction
         return Temp;
     }
@@ -39,18 +39,23 @@ class ConcreteBuilder implements Builder{
 
 /** Optional: Director to build complex objects in order many times */
 class Director {
-    private Builder: Builder;
+    private Builder!: PizzaBuilder;
 
-    public setBuilder(BuilderType: Builder): void {
+    public setBuilder(BuilderType: PizzaBuilder): void {
         this.Builder = BuilderType;
     }
 
-    public buildMinimalViableProduct(): void {
-        this.Builder.stepOne();
+    // buildMinimalViableProduct
+    public buildItalianStyle(): void {
+        this.Builder.addCrust("italian style");
+        this.Builder.addTopping("parmesan");
     }
 
-    public buildFullFeaturedProduct(): void {
-        this.Builder.stepOne();
-        this.Builder.stepTwo("world!");
+    //buildFullFeaturedProduct
+    public buildHousePizza(): void {
+        this.Builder.addCrust("deep dish");
+        this.Builder.addSauce("red");
+        this.Builder.addTopping("mushrooms");
+        this.Builder.addTopping("cheese!");
     }
 }
